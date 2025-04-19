@@ -24,8 +24,6 @@ public class ApiAccessInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        log.info(">> Interceptor ejecutado para " + request.getRequestURI());
-
         String endpoint = request.getRequestURI();
         String method = request.getMethod();
         int status = response.getStatus();
@@ -38,7 +36,7 @@ public class ApiAccessInterceptor implements HandlerInterceptor {
         if (endpoint.matches("/pokedex/\\d+")) {
             pokemonIdStr = endpoint.split("/")[2];
         } else if (endpoint.matches("/pokedex/without-evolution/\\d+")) {
-            pokemonIdStr = endpoint.split("/")[3];  // Para el nuevo endpoint, el id está en la posición 3
+            pokemonIdStr = endpoint.split("/")[3];
         }
 
         Pokemon pokemon = null;
