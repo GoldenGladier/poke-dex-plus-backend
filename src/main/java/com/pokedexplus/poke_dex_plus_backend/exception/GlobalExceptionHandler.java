@@ -48,4 +48,12 @@ public class GlobalExceptionHandler {
         ErrorDTO error = new ErrorDTO("An unexpected error occurred");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // ---- Pokemon Errors ----
+    @ExceptionHandler(InvalidPokemonIdException.class)
+    public ResponseEntity<ErrorDTO> handleInvalidPokemonId(InvalidPokemonIdException ex) {
+        log.error("The Pokemon ID must be a number: {}", ex.getMessage());
+        ErrorDTO error = new ErrorDTO(ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 }
