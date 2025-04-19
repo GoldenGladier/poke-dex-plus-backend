@@ -1,5 +1,6 @@
 package com.pokedexplus.poke_dex_plus_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,9 +12,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(exclude = "evolutionChain")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,6 +29,7 @@ public class EvolutionStage {
 
     @ManyToOne
     @JoinColumn(name = "evolution_chain_id", nullable = false)
+    @JsonBackReference
     private EvolutionChain evolutionChain;
 
     @OneToOne

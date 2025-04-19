@@ -39,21 +39,8 @@ public class PokemonService {
         Optional<Pokemon> pokemon = pokemonRepository.findById(pokemonId);
         if(pokemon.isPresent()) return pokemon.get();
 
-        // 1. If the Pokemon doesn't exist in DB
-        log.info("Pokemon ID '{}' does not exist, searching on a central base", id);
-        String pokemonUrl = "https://pokeapi.co/api/v2/pokemon/" + pokemonId;
-        ExternalPokemonDTO pokemonResponse = restTemplate.getForObject(pokemonUrl, ExternalPokemonDTO.class);
-
-        Pokemon newPokemon = Pokemon.builder()
-                .id((long) pokemonResponse.getId())
-                .name(pokemonResponse.getName())
-                .height(pokemonResponse.getHeight())
-                .weight(pokemonResponse.getWeight())
-                .urlImage(pokemonResponse.getSprites().getFrontDefault())
-                .baseExperience(pokemonResponse.getBaseExperience())
-                .build();
-
-        // 2. Looking for the specie for the id of evolution chain
+        log.debug("The Pokemon ID '{}' doesn't exist. Looking for Pokemon in the Data Center.", id);
+        // 2. If the Pokemon doesn't exist in DB looking for the specie for the id of evolution chain
         String speciesUrl = "https://pokeapi.co/api/v2/pokemon-species/" + pokemonId;
         PokemonSpeciesDTO species = restTemplate.getForObject(speciesUrl, PokemonSpeciesDTO.class);
 
@@ -66,18 +53,15 @@ public class PokemonService {
                         .id(evolutionData.getId())
                         .build();
                 evolutionChain = evolutionChainRepository.save(evolutionChain);
-                log.info("Nueva evolutionChain: " + evolutionChain.toString());
-
-                newPokemon.setEvolutionChain(evolutionChain);
-                log.info("Pokemon actualizado evolutionChain: " + newPokemon.toString());
 
                 mapEvolutionStates(evolutionChain, evolutionData.getChain(), 1);
             }
         }
 
-        log.info("Guardando el newPokemon: ");
-        log.info(newPokemon.toString());
-        newPokemon = pokemonRepository.save(newPokemon);
+
+        Pokemon newPokemon = pokemonRepository.findById(pokemonId).orElseThrow();
+        log.info("Pokemon was created: " + newPokemon);
+
         return newPokemon;
     }
 
@@ -93,6 +77,7 @@ public class PokemonService {
                 .build();
 
         evolutionStageRepository.save(stage);
+        chainEntity.getStages().add(stage);
 
         for (EvolutionChainDTO.EvolutionLink next : link.getEvolves_to()) {
             mapEvolutionStates(chainEntity, next, stageOrder + 1);
