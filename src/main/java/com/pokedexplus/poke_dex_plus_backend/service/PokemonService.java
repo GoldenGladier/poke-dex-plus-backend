@@ -53,8 +53,6 @@ public class PokemonService {
                 .baseExperience(pokemonResponse.getBaseExperience())
                 .build();
 
-        newPokemon = pokemonRepository.save(newPokemon);
-
         // 2. Looking for the specie for the id of evolution chain
         String speciesUrl = "https://pokeapi.co/api/v2/pokemon-species/" + pokemonId;
         PokemonSpeciesDTO species = restTemplate.getForObject(speciesUrl, PokemonSpeciesDTO.class);
@@ -66,21 +64,27 @@ public class PokemonService {
             if(evolutionData != null) {
                 EvolutionChain evolutionChain = EvolutionChain.builder()
                         .id(evolutionData.getId())
-                        .pokemon(newPokemon)
                         .build();
                 evolutionChain = evolutionChainRepository.save(evolutionChain);
+                log.info("Nueva evolutionChain: " + evolutionChain.toString());
+
+                newPokemon.setEvolutionChain(evolutionChain);
+                log.info("Pokemon actualizado evolutionChain: " + newPokemon.toString());
 
                 mapEvolutionStates(evolutionChain, evolutionData.getChain(), 1);
             }
         }
 
+        log.info("Guardando el newPokemon: ");
+        log.info(newPokemon.toString());
+        newPokemon = pokemonRepository.save(newPokemon);
         return newPokemon;
     }
 
     private void mapEvolutionStates(EvolutionChain chainEntity, EvolutionChainDTO.EvolutionLink link, int stageOrder) {
         String name = link.getSpecies().getName();
         Optional<Pokemon> optionalPokemon = pokemonRepository.findByName(name);
-        Pokemon pokemon = optionalPokemon.orElseGet(() -> fetchAndSavePokemon(name));
+        Pokemon pokemon = optionalPokemon.orElseGet(() -> fetchAndSavePokemon(name, chainEntity));
 
         EvolutionStage stage = EvolutionStage.builder()
                 .evolutionChain(chainEntity)
@@ -95,19 +99,21 @@ public class PokemonService {
         }
     }
 
-    private Pokemon fetchAndSavePokemon(String name) {
+    private Pokemon fetchAndSavePokemon(String name, EvolutionChain evolutionChain) {
         String url = "https://pokeapi.co/api/v2/pokemon/" + name;
         ExternalPokemonDTO dto = restTemplate.getForObject(url, ExternalPokemonDTO.class);
 
         if (dto == null) return null;
 
-        return pokemonRepository.save(Pokemon.builder()
+        Pokemon newPokemon = Pokemon.builder()
                 .id((long) dto.getId())
                 .name(dto.getName())
                 .height(dto.getHeight())
                 .weight(dto.getWeight())
                 .baseExperience(dto.getBaseExperience())
                 .urlImage(dto.getSprites().getFrontDefault())
-                .build());
+                .evolutionChain(evolutionChain)
+                .build();
+        return pokemonRepository.save(newPokemon);
     }
 }

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PokemonController {
     private final PokemonService pokemonService;
+    private final PokemonMapper pokemonMapper;
 
     @GetMapping("/{id}")
     public ResponseEntity<PokemonDTO> getPokemon(@PathVariable String id) {
         Pokemon pokemon = pokemonService.findOrFetchPokemon(id);
-        PokemonDTO pokemonDTO = PokemonMapper.toDTO(pokemon);
-        return ResponseEntity.ok(pokemonDTO);
+        return ResponseEntity.ok(pokemonMapper.toDTO(pokemon));
     }
 }

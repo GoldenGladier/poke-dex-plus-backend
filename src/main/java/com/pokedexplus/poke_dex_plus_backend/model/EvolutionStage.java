@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class EvolutionStage {
     @JoinColumn(name = "evolution_chain_id", nullable = false)
     private EvolutionChain evolutionChain;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "pokemon_id", nullable = false)
     private Pokemon pokemon;
 }

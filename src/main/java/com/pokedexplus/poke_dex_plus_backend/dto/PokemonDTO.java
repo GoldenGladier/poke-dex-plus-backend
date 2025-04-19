@@ -16,7 +16,7 @@ public class PokemonDTO {
     private Integer weight;
     private String urlImage;
     private Integer baseExperience;
-    private List<EvolutionChainDTO> evolutionChains;
+    private EvolutionChainDTO evolutionChain;
 
     @Data
     @AllArgsConstructor
@@ -34,5 +34,6 @@ public class PokemonDTO {
         private Integer stageOrder;
         private Long pokemonId;
         private String pokemonName;
+        private String pokemonUrlImage;
     }
 }
