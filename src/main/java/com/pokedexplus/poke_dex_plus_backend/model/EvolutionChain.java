@@ -23,9 +23,6 @@ public class EvolutionChain {
     @Id
     private Integer id;
 
-//    @OneToMany(mappedBy = "evolutionChain", cascade = CascadeType.ALL)
-//    private List<Pokemon> pokemons;
-
     @OneToMany(mappedBy = "evolutionChain", cascade = CascadeType.ALL)
     @Builder.Default
     private List<EvolutionStage> stages = new ArrayList<>();

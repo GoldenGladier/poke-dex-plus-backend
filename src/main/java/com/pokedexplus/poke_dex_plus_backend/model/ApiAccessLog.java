@@ -26,12 +26,10 @@ public class ApiAccessLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relación opcional con User
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
-    // Relación opcional con Pokemon
     @ManyToOne
     @JoinColumn(name = "pokemon_id", nullable = true)
     private Pokemon pokemon;
