@@ -1,7 +1,10 @@
 package com.pokedexplus.poke_dex_plus_backend.model;
 
+import com.pokedexplus.poke_dex_plus_backend.model.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,5 +31,6 @@ public class User {
     @NotNull
     private String password;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

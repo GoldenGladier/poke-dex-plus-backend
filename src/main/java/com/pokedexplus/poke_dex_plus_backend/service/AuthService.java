@@ -6,6 +6,7 @@ import com.pokedexplus.poke_dex_plus_backend.dto.RegisterDTO;
 import com.pokedexplus.poke_dex_plus_backend.exception.InvalidCredentialsException;
 import com.pokedexplus.poke_dex_plus_backend.exception.UsernameAlreadyExistsException;
 import com.pokedexplus.poke_dex_plus_backend.model.User;
+import com.pokedexplus.poke_dex_plus_backend.model.enums.Role;
 import com.pokedexplus.poke_dex_plus_backend.repository.UserRepository;
 import com.pokedexplus.poke_dex_plus_backend.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class AuthService {
         User user = User.builder()
                 .username(registerDTO.getUsername())
                 .password(passwordEncoder.encode(registerDTO.getPassword()))
+                .role(Role.TRAINER)
                 .build();
 
         userRepository.save(user);

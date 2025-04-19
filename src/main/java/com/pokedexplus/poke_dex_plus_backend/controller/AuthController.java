@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @Autowired
-    UserRepository userRepository;
-
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterDTO registerDTO) {
         return ResponseEntity.ok(authService.register(registerDTO));
