@@ -23,4 +23,10 @@ public class PokemonController {
         Pokemon pokemon = pokemonService.findOrFetchPokemon(id);
         return ResponseEntity.ok(pokemonMapper.toDTO(pokemon));
     }
+
+    @GetMapping("/without-evolution/{id}")
+    public ResponseEntity<PokemonDTO> getPokemonWithoutEvolution(@PathVariable String id) {
+        Pokemon pokemon = pokemonService.findOrFetchPokemon(id);
+        return ResponseEntity.ok(pokemonMapper.toDTOWithoutEvolution(pokemon));
+    }
 }

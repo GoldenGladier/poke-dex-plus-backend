@@ -10,5 +10,8 @@ public interface PokemonMapper {
     @Mapping(target = "evolutionChain", source = "evolutionChain")
     PokemonDTO toDTO(Pokemon pokemon);
 
+    @Mapping(target = "evolutionChain", ignore = true)
+    PokemonDTO toDTOWithoutEvolution(Pokemon pokemon);
+
     Pokemon toEntity(PokemonDTO dto);
 }
