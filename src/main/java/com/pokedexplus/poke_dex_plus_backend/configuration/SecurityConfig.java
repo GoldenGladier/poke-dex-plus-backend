@@ -36,6 +36,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/pokedex/without-evolution/**"
                         ).permitAll()
+                        .requestMatchers("/api/access-logs").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
