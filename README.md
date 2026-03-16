@@ -80,4 +80,4 @@ spring.datasource.url=jdbc:mysql://localhost:3306/pokedex
 spring.datasource.username=your_user
 spring.datasource.password=your_password
 
-jwt.secret=your_secret_key
+jwt.key=your_secret_key
